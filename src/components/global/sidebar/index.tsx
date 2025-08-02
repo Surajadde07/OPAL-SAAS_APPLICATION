@@ -13,6 +13,7 @@ import { PlusCircle } from 'lucide-react'
 import Search from '../search'
 import { MENU_ITEMS } from '@/constants'
 import SidebarItem from './sidebar-item'
+import WorkspacePlaceholder from './workspace-placeholder'
 
 type Props = {
     activeWorkspaceId: string
@@ -114,6 +115,42 @@ const Sidebar = ({ activeWorkspaceId }: Props) => {
                         />
                     ))}
                 </ul>
+                <Separator className='w-4/5' />
+                <p className='w-full text-[#9D9D9D] font-bold mt-4'>Workspaces</p>
+                <nav className='w-full'>
+                    <ul className='h-[150px] overflow-auto overflow-x-hidden fade-layer'>
+                        {workspace.workspace.length > 0 &&
+                            workspace.workspace.map((item) => (
+                                item.type !== 'PERSONAL' && (
+                                    <SidebarItem
+                                        href={`/dashboard/${item.id}`}
+                                        selected={pathName === `/dashboard/${item.id}`}
+                                        title={item.name}
+                                        notifications={0}
+                                        key={item.name}
+                                        icon={<WorkspacePlaceholder>
+                                            {item.name.charAt(0)}
+                                        </WorkspacePlaceholder>}
+                                    />
+                                )
+                            ))}
+                            {
+                                workspace.members.length > 0 && 
+                                workspace.members.map((item) => (
+                                    <SidebarItem
+                                        href={`/dashboard/${item.Workspace.id}`}
+                                        selected={pathName === `/dashboard/${item.Workspace.id}`}
+                                        title={item.Workspace.name}
+                                        notifications={0}
+                                        key={item.Workspace.name}
+                                        icon={<WorkspacePlaceholder>
+                                            {item.Workspace.name.charAt(0)}
+                                        </WorkspacePlaceholder>}
+                                    />
+                                ))
+                            }
+                    </ul>
+                </nav>
             </nav>
         </div>
     )
@@ -123,3 +160,4 @@ export default Sidebar
 
 //? 02:25:39
 //? 03:22:18
+//? 03:48:05
