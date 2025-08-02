@@ -14,12 +14,16 @@ import Search from '../search'
 import { MENU_ITEMS } from '@/constants'
 import SidebarItem from './sidebar-item'
 import WorkspacePlaceholder from './workspace-placeholder'
+import GlobalCard from '../global-card'
+import { Button } from '@/components/ui/button'
+import Loader from '../loader'
 
 type Props = {
     activeWorkspaceId: string
 }
 
 const Sidebar = ({ activeWorkspaceId }: Props) => {
+    //! WIP: add the upgrade button
     const router = useRouter();
     const pathName = usePathname()
 
@@ -117,6 +121,14 @@ const Sidebar = ({ activeWorkspaceId }: Props) => {
                 </ul>
                 <Separator className='w-4/5' />
                 <p className='w-full text-[#9D9D9D] font-bold mt-4'>Workspaces</p>
+                {workspace.workspace.length === 1 &&
+                    workspace.members.length === 0 && (
+                        <div className='w-full mt-[-3px]'>
+                            <p className='text-[#3c3c3c] font-medium text-sm'>
+                                {workspace.subscription?.plan === 'FREE' ? 'Upgrade to create workspaces' : 'No workspaces'}
+                            </p>
+                        </div>)
+                }
                 <nav className='w-full'>
                     <ul className='h-[150px] overflow-auto overflow-x-hidden fade-layer'>
                         {workspace.workspace.length > 0 &&
@@ -134,23 +146,31 @@ const Sidebar = ({ activeWorkspaceId }: Props) => {
                                     />
                                 )
                             ))}
-                            {
-                                workspace.members.length > 0 && 
-                                workspace.members.map((item) => (
-                                    <SidebarItem
-                                        href={`/dashboard/${item.Workspace.id}`}
-                                        selected={pathName === `/dashboard/${item.Workspace.id}`}
-                                        title={item.Workspace.name}
-                                        notifications={0}
-                                        key={item.Workspace.name}
-                                        icon={<WorkspacePlaceholder>
-                                            {item.Workspace.name.charAt(0)}
-                                        </WorkspacePlaceholder>}
-                                    />
-                                ))
-                            }
+                        {
+                            workspace.members.length > 0 &&
+                            workspace.members.map((item) => (
+                                <SidebarItem
+                                    href={`/dashboard/${item.Workspace.id}`}
+                                    selected={pathName === `/dashboard/${item.Workspace.id}`}
+                                    title={item.Workspace.name}
+                                    notifications={0}
+                                    key={item.Workspace.name}
+                                    icon={<WorkspacePlaceholder>
+                                        {item.Workspace.name.charAt(0)}
+                                    </WorkspacePlaceholder>}
+                                />
+                            ))
+                        }
+
                     </ul>
                 </nav>
+                <Separator className='w-4/5' />
+                {workspace.subscription?.plan === 'FREE' && <GlobalCard title='Upgrade to Pro' description='Unlock AI features like transcription, AI summary and more.' footer={
+                    <Button className='text-sm w-full'>
+                        <Loader>Upgrade</Loader>
+                    </Button>
+                } />
+                }
             </nav>
         </div>
     )
@@ -161,3 +181,4 @@ export default Sidebar
 //? 02:25:39
 //? 03:22:18
 //? 03:48:05
+//? 03:54:53
