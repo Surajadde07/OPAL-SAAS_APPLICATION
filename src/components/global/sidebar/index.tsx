@@ -3,7 +3,7 @@
 import { getWorkSpaces } from '@/app/actions/workspace'
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Separator } from '@/components/ui/separator'
-import { useQueryData } from '@/hooks/useQueryData'
+import { userQueryData } from '@/hooks/userQueryData'
 import { WorkspaceProps } from '@/types/index.type'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
@@ -11,6 +11,7 @@ import { useRouter } from 'next/navigation'
 import React from 'react'
 import Modal from '../modal'
 import { PlusCircle } from 'lucide-react'
+import Search from '../search'
 
 type Props = {
     activeWorkspaceId: string
@@ -19,7 +20,7 @@ type Props = {
 const Sidebar = ({ activeWorkspaceId }: Props) => {
     const router = useRouter();
 
-    const { data, isFetched } = useQueryData(['user-workspaces'], getWorkSpaces);
+    const { data, isFetched } = userQueryData(['user-workspaces'], getWorkSpaces);
 
     const { data: workspace } = data as WorkspaceProps
 
@@ -82,7 +83,7 @@ const Sidebar = ({ activeWorkspaceId }: Props) => {
                 title="Invite To Workspace"
                 description='Invite other users to your workspace'
             >
-                WorkspaceSearch
+                <Search workspaceId={ activeWorkspaceId }/>
             </Modal>
         </div>
     )
