@@ -3,6 +3,7 @@ import { Geist, Geist_Mono, Manrope } from "next/font/google";
 import "./globals.css";
 import { ClerkProvider } from "@clerk/nextjs";
 import { ThemeProvider } from "@/components/theme";
+import ReactQueryProvider from "@/react-query";
 
 const manrope = Manrope({ subsets: ['latin'] })
 
@@ -19,13 +20,13 @@ export default function RootLayout({
   return (
     <ClerkProvider>
       <html lang="en">
-        <body className={`${manrope.className} bg-[#171717] px-3`}> {/* suraj added the px-3 */}
+        <body className={`${manrope.className} bg-[#171717]`}> {/* suraj wants to add the px-3 */}
           <ThemeProvider
             attribute="class"
             defaultTheme="dark"
             disableTransitionOnChange
           >
-            {children}
+            <ReactQueryProvider>{children}</ReactQueryProvider>
           </ThemeProvider>
         </body>
       </html>
