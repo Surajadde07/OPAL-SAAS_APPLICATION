@@ -1,0 +1,6 @@
+export { default as Settings } from './Settings'
+export { default as Bell } from './Bell'
+export { default as CreditCard } from './CreditCard'
+export { default as FileDuoBlack } from './FileDuoBlack'
+export { default as FileDuoToneBlack } from './FileDuoToneBlack'
+export { default as Home } from './Home'
