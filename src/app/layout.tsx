@@ -19,7 +19,7 @@ export default function RootLayout({
 }>) {
   return (
     <ClerkProvider>
-      <html lang="en">
+      <html lang="en" suppressHydrationWarning>
         <body className={`${manrope.className} bg-[#171717]`}> {/* suraj wants to add the px-3 */}
           <ThemeProvider
             attribute="class"

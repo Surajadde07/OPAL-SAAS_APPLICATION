@@ -35,9 +35,10 @@ const Folders = ({ workspaceId }: Props) => {
 
     const { status, data: folders } = data as FolderProps
 
-    if(isFetched && folders){
+    // if(isFetched && folders){
+    // }
 
-    }
+    //! WIP: add redux stuff for folders
     //! WIP: add the classnames for the folder based on success response
     return (
         <div className='flex flex-col gap-y-4'>
@@ -51,8 +52,21 @@ const Folders = ({ workspaceId }: Props) => {
                     <ArrowRightIcon color='#707070' />
                 </div>
             </div>
-            <section className={cn('flex items-center gap-4 overflow-x-auto w-full')}>
-                <Folder name='Folder title' />
+            <section className={cn( status !== 200 && 'justify-center', 'flex items-center gap-4 overflow-x-auto w-full')}>
+                {status !== 200 ? (<p className='text-neutral-300'>No folders in workspace</p>) : (<>{latestVariales && latestVariales.status === 'pending' && (
+                    <Folder name={latestVariales.variables.name} id={latestVariales.variables.id} optimistic />
+                )}
+                {
+                    folders.map((folder) => {
+                        <Folder 
+                        name={folder.name}
+                        count={folder._count.videos}
+                        id={folder.id}
+                        key={folder.id}
+                        />
+                    })
+                }
+                </>)}
             </section>
         </div>
     )

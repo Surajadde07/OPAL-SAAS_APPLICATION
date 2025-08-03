@@ -1,3 +1,4 @@
+'use client'
 import { MutationFunction, MutationKey, useMutation, useMutationState, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 
