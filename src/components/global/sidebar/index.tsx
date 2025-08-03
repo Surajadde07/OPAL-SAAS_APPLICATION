@@ -3,13 +3,12 @@
 import { getNotifications, getWorkSpaces } from '@/app/actions/workspace'
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Separator } from '@/components/ui/separator'
-import { userQueryData } from '@/hooks/userQueryData'
 import { NotificationsProps, WorkspaceProps } from '@/types/index.type'
 import Image from 'next/image'
 import { usePathname, useRouter } from 'next/navigation'
 import React from 'react'
 import Modal from '../modal'
-import { PlusCircle } from 'lucide-react'
+import { Menu, PlusCircle } from 'lucide-react'
 import Search from '../search'
 import { MENU_ITEMS } from '@/constants'
 import SidebarItem from './sidebar-item'
@@ -17,6 +16,9 @@ import WorkspacePlaceholder from './workspace-placeholder'
 import GlobalCard from '../global-card'
 import { Button } from '@/components/ui/button'
 import Loader from '../loader'
+import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
+import InfoBar from '../info-bar'
+import { useQueryData } from '@/hooks/useQueryData'
 
 type Props = {
     activeWorkspaceId: string
@@ -25,12 +27,12 @@ type Props = {
 const Sidebar = ({ activeWorkspaceId }: Props) => {
     //! WIP: add the upgrade button
     const router = useRouter();
-    const pathName = usePathname()
+    const pathName = usePathname();
 
-    const { data, isFetched } = userQueryData(['user-workspaces'], getWorkSpaces);
+    const { data, isFetched } = useQueryData(['user-workspaces'], getWorkSpaces);
     const menuItems = MENU_ITEMS(activeWorkspaceId);
 
-    const { data: notifications } = userQueryData(['user-notifications'], getNotifications)
+    const { data: notifications } = useQueryData(['user-notifications'], getNotifications)
     const { data: workspace } = data as WorkspaceProps
     const { data: count } = notifications as NotificationsProps
 
@@ -44,7 +46,7 @@ const Sidebar = ({ activeWorkspaceId }: Props) => {
 
 
 
-    return (
+    const SidebarSection = (
         <div className='bg-[#111111] flex-none relative p-4 h-full w-[250px] flex flex-col gap-4 items-center overflow-hidden'>
             <div className='bg-[#111111] flex p-4 gap-2 justify-center items-center mb-4 absolute top-0 left-0 right-0'>
                 <Image
@@ -167,13 +169,30 @@ const Sidebar = ({ activeWorkspaceId }: Props) => {
                 <Separator className='w-4/5' />
                 {workspace.subscription?.plan === 'FREE' && <GlobalCard title='Upgrade to Pro' description='Unlock AI features like transcription, AI summary and more.' footer={
                     <Button className='text-sm w-full'>
-                        <Loader>Upgrade</Loader>
+                        <Loader color='#000' state={false}>Upgrade</Loader>
                     </Button>
                 } />
                 }
             </nav>
         </div>
     )
+    return <div className='full'>
+        <InfoBar />
+        {/* Sheet mobile and desktop */}
+        <div className='md:hidden fixed my-4'>
+            <Sheet>
+                <SheetTrigger asChild className='ml-2'>
+                    <Button variant={'ghost'} className='mt-[2px]'>
+                        <Menu />
+                    </Button>
+                </SheetTrigger>
+                <SheetContent side={'left'} className='p-0 w-fit h-full'>
+                    {SidebarSection}
+                </SheetContent>
+            </Sheet>
+        </div>
+        <div className='md:block hidden h-full'>{SidebarSection}</div>
+    </div>
 }
 
 export default Sidebar

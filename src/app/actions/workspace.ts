@@ -119,9 +119,9 @@ export const getWorkSpaces = async () => {
             where: {
                 clerkid: user.id,
             },
-            select:{
-                subscription:{
-                    select:{
+            select: {
+                subscription: {
+                    select: {
                         plan: true,
                     },
                 },
@@ -132,10 +132,10 @@ export const getWorkSpaces = async () => {
                         type: true,
                     },
                 },
-                members:{
-                    select:{
-                        WorkSpace:{
-                            select:{
+                members: {
+                    select: {
+                        WorkSpace: {
+                            select: {
                                 id: true,
                                 name: true,
                                 type: true,
@@ -146,7 +146,7 @@ export const getWorkSpaces = async () => {
             },
         })
 
-        if(workspaces){
+        if (workspaces) {
             return { status: 200, data: workspaces }
         }
     }
@@ -163,10 +163,10 @@ export const getNotifications = async () => {
             where: {
                 clerkid: user.id,
             },
-            select:{
+            select: {
                 notification: true,
-                _count:{
-                    select:{
+                _count: {
+                    select: {
                         notification: true,
                     },
                 },
@@ -183,3 +183,46 @@ export const getNotifications = async () => {
         return { status: 400, data: [] }
     }
 }
+
+
+export const createWorkspace = async (name: string) => {
+    try {
+        const user = await currentUser();
+        if (!user) return { status: 403 }
+        const authorized = await client.user.findUnique({
+            where: {
+                clerkid: user.id,
+            },
+            select: {
+                subscription: {
+                    select: {
+                        plan: true,
+                    },
+                },
+            },
+        })
+
+        if (authorized?.subscription?.plan === 'PRO') {
+            const workspace = await client.user.update({
+                where: {
+                    clerkid: user.id,
+                },
+                data: {
+                    workspace: {
+                        create: {
+                            name,
+                            type: 'PUBLIC',
+                        },
+                    },
+                },
+            })
+            if (workspace) {
+                return { status: 200, data: "Workspace created" }
+            }
+        }
+        return { status: 401, data: "You are not authorized to create a workspace" }
+    } catch (error) {
+        return { status: 400 }
+    }
+}
+

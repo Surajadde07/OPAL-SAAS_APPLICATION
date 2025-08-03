@@ -1,7 +1,7 @@
 import { set } from "date-fns"
 import { useEffect, useState } from "react"
-import { userQueryData } from "./userQueryData"
 import { searchUsers } from "@/app/actions/user"
+import { useQueryData } from "./useQueryData"
 
 export const useSearch = (key: string, type: 'USERS') => {
     const [query, setQuery] = useState('')
@@ -32,7 +32,7 @@ export const useSearch = (key: string, type: 'USERS') => {
         return () => clearTimeout(delayInputTimeoutId)
     }, [query])
 
-    const { refetch, isFetching } = userQueryData([key, debounce],
+    const { refetch, isFetching } = useQueryData([key, debounce],
         async ({ queryKey }) => {
             if (type == "USERS") {
                 const users = await searchUsers(queryKey[1] as string)

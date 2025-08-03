@@ -1,6 +1,8 @@
+"use client" //! suraj did this it was not there before
+
 import { Enabled, QueryFunction, QueryKey, useQuery } from "@tanstack/react-query";
 
-export const userQueryData= (
+export const useQueryData= (
     queryKey: QueryKey,
     queryFn: QueryFunction,
     enabled?: Enabled
