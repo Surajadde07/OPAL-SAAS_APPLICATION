@@ -1,8 +1,9 @@
-import CreateFolders from '@/components/global/create-folders'
+
 import CreateWorkspace from '@/components/global/create-workspace'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import Folders from '@/components/global/folders'
 import React from 'react'
+import CreateFolders from '@/components/global/create-folders'
 
 type Props = {
   params: Promise<{ workspaceId: string }>
