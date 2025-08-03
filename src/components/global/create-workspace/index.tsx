@@ -38,21 +38,20 @@ const CreateWorkspace = (props: Props) => {
         return null; // or some error state
     }
 
-    // if (plan.subscription?.plan === 'FREE') {
-    //     return <></>
-    // }
+    if (plan.subscription?.plan === 'FREE') {
+        return <></>
+    }
 
-    // if (plan.subscription?.plan === 'PRO') {
-    return (
-        <Modal title='Create Workspace' description='This action cannot be undone.This will permanently delete your account and remove your data from our server'
-            trigger={<Button className='bg-[#1D1D1D] text-[#707070] flex items-center gap-2 py-6 px-4 rounded-2xl'>
-                <FolderPlusIcon />
-                Create a workspace
-            </Button>}>
-            <WorkspaceForm />
-        </Modal>
-    )
-    // }
+    if (plan.subscription?.plan === 'PRO') {
+        return (
+            <Modal title='Create Workspace' description='This action cannot be undone.This will permanently delete your account and remove your data from our server'
+                trigger={<Button className='bg-[#1D1D1D] text-[#707070] flex items-center gap-2 py-6 px-4 rounded-2xl'>
+                    <FolderPlusIcon />
+                </Button>}>
+                <WorkspaceForm />
+            </Modal>
+        )
+    }
 }
 
 export default CreateWorkspace
