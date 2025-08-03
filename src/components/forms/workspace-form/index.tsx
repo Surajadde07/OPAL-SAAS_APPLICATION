@@ -1,11 +1,12 @@
+import { useCreateWorkspace } from '@/hooks/useCreateWorkspace'
 import React from 'react'
 
 type Props = {}
 
 const WorkspaceForm = (props: Props) => {
-    useCreateWorkspace()
+    const {errors, onFormSubmit, register, isPending} = useCreateWorkspace()
     return (
-        <div>WorkspaceForm</div>
+        <form onSubmit={onFormSubmit} className='flex flex-col gap-y-3'>fadk</form>
     )
 }
 
