@@ -18,8 +18,8 @@ const CreateWorkspace = (props: Props) => {
     if (isPending || !data) {
         return (
             <Button className='bg-[#1D1D1D] text-[#707070] flex items-center gap-2 py-6 px-4 rounded-2xl' disabled>
-                <FolderPlusIcon />
-                Loading...
+                {/* <FolderPlusIcon />
+                Loading... */}
             </Button>
         )
     }
