@@ -12,10 +12,10 @@ type Props = {
     workspaceId: string
 }
 
-export type FolderProps ={
+export type FolderProps = {
     status: number
     data: ({
-        _count:{
+        _count: {
             videos: number
         }
     } & {
@@ -29,9 +29,9 @@ export type FolderProps ={
 const Folders = ({ workspaceId }: Props) => {
 
     // get the folders
-    const { data , isFetched} = useQueryData(['workspace-folders'],() => getWorkspaceFolders(workspaceId))
+    const { data, isFetched } = useQueryData(['workspace-folders'], () => getWorkspaceFolders(workspaceId))
 
-    const { latestVariales} = useMutationDataState(['create-folder'])
+    const { latestVariables } = useMutationDataState(['create-folder'])
 
     const { status, data: folders } = data as FolderProps
 
@@ -44,7 +44,7 @@ const Folders = ({ workspaceId }: Props) => {
         <div className='flex flex-col gap-y-4'>
             <div className='flex items-center justify-between'>
                 <div className='flex items-center gap-4'>
-                    <Fold color='#BDBDBD' fill='#BDBDBD' size={20}/>
+                    <Fold color='#BDBDBD' fill='#BDBDBD' size={20} />
                     <h2 className='text-[#BDBDBD]'>Folders</h2>
                 </div>
                 <div className='flex items-center gap-2'>
@@ -52,20 +52,20 @@ const Folders = ({ workspaceId }: Props) => {
                     <ArrowRightIcon color='#707070' />
                 </div>
             </div>
-            <section className={cn( status !== 200 && 'justify-center', 'flex items-center gap-4 overflow-x-auto w-full')}>
-                {status !== 200 ? (<p className='text-neutral-300'>No folders in workspace</p>) : (<>{latestVariales && latestVariales.status === 'pending' && (
-                    <Folder name={latestVariales.variables.name} id={latestVariales.variables.id} optimistic />
+            <section className={cn(status !== 200 && 'justify-center', 'flex items-center gap-4 overflow-x-auto w-full')}>
+                {status !== 200 ? (<p className='text-neutral-300'>No folders in workspace</p>) : (<>{latestVariables && latestVariables.status === 'pending' && (
+                    <Folder name={latestVariables.variables.name} id={latestVariables.variables.id} optimistic />
                 )}
-                {
-                    folders.map((folder) => {
-                        <Folder 
-                        name={folder.name}
-                        count={folder._count.videos}
-                        id={folder.id}
-                        key={folder.id}
-                        />
-                    })
-                }
+                    {
+                        folders.map((folder) => (
+                            <Folder
+                                name={folder.name}
+                                count={folder._count.videos}
+                                id={folder.id}
+                                key={folder.id}
+                            />
+                        ))
+                    }
                 </>)}
             </section>
         </div>

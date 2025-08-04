@@ -37,6 +37,6 @@ export const useMutationDataState = (mutationKey: MutationKey) => {
         },
     })
 
-    const latestVariales = data[data.length-1]
-    return {latestVariales}
+    const latestVariables = data[data.length-1]
+    return { latestVariables }
 }
