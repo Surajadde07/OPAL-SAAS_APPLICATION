@@ -23,7 +23,7 @@ const video = {
     id: 'video123',
     processing: false,
     Folder: {
-        id: 'folder123',
+        id: 'folder456',
         name: 'Marketing Videos'
     },
     createdAt: new Date('2023-10-01T12:00:00Z'),
@@ -45,8 +45,7 @@ const Videos = ({ folderId, videoKey, workspaceId }: Props) => {
                 </div>
             </div>
             <section className={cn(videosStatus !== 200 ? 'p-5' : 'grid grid-cols-1 gap-10 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5')}>
-                {/* {videosStatus === 200 ? videos.map((video) => <VideoCard/>) : <p className='text-[#BDBDBD]'>No videos in workspace</p>} */}
-                <VideoCard workspaceId={workspaceId} {...video} />
+                {videosStatus === 200 ? videos.map((video) => <VideoCard key={video.id} workspaceId={workspaceId} {...video} />) : <p className='text-[#BDBDBD]'>No videos in workspace</p>}
             </section>
         </div>
     )

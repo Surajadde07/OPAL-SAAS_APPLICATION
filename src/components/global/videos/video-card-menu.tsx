@@ -13,10 +13,10 @@ type Props = {
 const CardMenu = ({ videoId, currentWorkspace, currentFolder, currentFolderName }: Props) => {
     return (
         <Modal className='flex items-center cursor-pointer gap-x-2'
-        title='Move to new Workspace/Folder' description='This action cannot be undone. This will permanently move delete your account and remove your data from our servers.' trigger={
-            <Move size={20} fill='#a4a4a4' className='text-[#a4a4a4]' />
-        } >
-            <ChangeVideoLocation currentFolder={currentFolder} currentFolderName={currentFolderName} videoId={videoId} currentWorkspace={currentWorkspace} />
+            title='Move to new Workspace/Folder' description='This action cannot be undone. This will permanently move delete your account and remove your data from our servers.' trigger={
+                <Move size={20} fill='#a4a4a4' className='text-[#a4a4a4]' />
+            } >
+            <ChangeVideoLocation currentFolder={currentFolder} currentFolderName={currentFolderName} videoId={videoId} currentWorkSpace={currentWorkspace} />
         </Modal>
     )
 }
