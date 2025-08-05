@@ -1,5 +1,6 @@
 import { getAllUserVideos, getFolderInfo } from '@/app/actions/workspace'
 import FolderInfo from '@/components/global/folders/folder-info'
+import Videos from '@/components/global/videos'
 import { dehydrate, HydrationBoundary, QueryClient } from '@tanstack/react-query'
 import React from 'react'
 
@@ -8,7 +9,6 @@ type Props = {
         folderId: string,
         workspaceId: string
     }
-
 }
 
 const page = async ({ params: { folderId, workspaceId } }: Props) => {
@@ -24,6 +24,7 @@ const page = async ({ params: { folderId, workspaceId } }: Props) => {
     })
     return <HydrationBoundary state={dehydrate(query)}>
         <FolderInfo folderId={folderId} />
+        <Videos workspaceId={workspaceId} folderId={folderId} videoKey="folder-videos" />
     </HydrationBoundary>
 }
 
