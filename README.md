@@ -2,10 +2,6 @@
 
 <div align="center">
 
-<img src="./opal-logo.svg" alt="OPAL Logo" width="200" height="auto">
-
-# 🎥 OPAL
-
 **A powerful, multi-platform video recording and management solution built with modern web technologies**
 
 [![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)](https://typescriptlang.org/)
