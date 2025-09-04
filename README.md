@@ -2,7 +2,9 @@
 
 <div align="center">
 
-![OPAL Logo](./opal-web-version/public/opal-logo.svg)
+<img src="./opal-logo.svg" alt="OPAL Logo" width="200" height="auto">
+
+# 🎥 OPAL
 
 **A powerful, multi-platform video recording and management solution built with modern web technologies**
 
@@ -254,7 +256,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 📞 Support
 
-- 📧 **Email**: support@opal.dev
+- 📧 **Email**: surajadde57@gmail.com
 - 💬 **Discord**: [Join our community](https://discord.gg/opal)
 - 📚 **Documentation**: [docs.opal.dev](https://docs.opal.dev)
 - 🐛 **Issues**: [GitHub Issues](https://github.com/Surajadde07/OPAL-DESKTOP/issues)
