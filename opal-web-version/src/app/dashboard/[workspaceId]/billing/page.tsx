@@ -1,6 +1,9 @@
 import { getPaymentInfo } from '@/actions/user'
 import React from 'react'
 
+// Force dynamic rendering for this page
+export const dynamic = 'force-dynamic'
+
 type Props = {}
 
 const BillingPage = async (props: Props) => {
@@ -23,3 +26,4 @@ const BillingPage = async (props: Props) => {
 }
 
 export default BillingPage
+//! CHANGED FOR DEPLOYMENT

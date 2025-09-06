@@ -2,6 +2,9 @@ import { acceptInvite } from '@/actions/user'
 import { redirect } from 'next/navigation'
 import React from 'react'
 
+// Force dynamic rendering for this page
+export const dynamic = 'force-dynamic'
+
 type Props = {
   params: {
     inviteId: string
@@ -26,3 +29,6 @@ const Page = async ({ params: { inviteId } }: Props) => {
 }
 
 export default Page
+
+
+//! CHANGED FOR DEPLOYMENT

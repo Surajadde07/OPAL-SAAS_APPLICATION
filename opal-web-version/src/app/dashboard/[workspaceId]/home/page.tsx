@@ -3,6 +3,9 @@ import HowToPost from '@/components/global/how-to-post'
 import VideoCard from '@/components/global/videos/video-card'
 import React from 'react'
 
+// Force dynamic rendering for this page
+export const dynamic = 'force-dynamic'
+
 type Props = {}
 
 const Home = async (props: Props) => {
@@ -37,3 +40,4 @@ const Home = async (props: Props) => {
 export default Home
 
 //? 15:46:19
+//! CHANGED FOR DEPLOYMENT

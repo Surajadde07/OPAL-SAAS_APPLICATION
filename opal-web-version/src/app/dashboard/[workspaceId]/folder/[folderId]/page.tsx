@@ -8,6 +8,9 @@ import {
 } from '@tanstack/react-query'
 import React from 'react'
 
+// Force dynamic rendering for this page
+export const dynamic = 'force-dynamic'
+
 type Props = {
   params: {
     folderId: string
@@ -40,3 +43,4 @@ const page = async ({ params: { folderId, workspaceId } }: Props) => {
 }
 
 export default page
+//! CHANGED FOR DEPLOYMENT

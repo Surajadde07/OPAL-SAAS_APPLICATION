@@ -9,6 +9,9 @@ import {
 } from '@tanstack/react-query'
 import React from 'react'
 
+// Force dynamic rendering for this page
+export const dynamic = 'force-dynamic'
+
 type Props = {
   params: {
     videoId: string
@@ -42,3 +45,5 @@ const VideoPage = async ({ params: { videoId } }: Props) => {
 }
 
 export default VideoPage
+
+//! CHANGED FOR DEPLOYMENT
