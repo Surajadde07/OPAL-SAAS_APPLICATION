@@ -2,6 +2,10 @@ import { client } from '@/lib/prisma'
 import { clerkClient } from '@clerk/nextjs/server'
 import { NextRequest, NextResponse } from 'next/server'
 
+// Force dynamic rendering for this API route
+export const dynamic = 'force-dynamic'
+export const runtime = 'nodejs'
+
 export async function GET(
   req: NextRequest,
   { params: { id } }: { params: { id: string } }
@@ -74,3 +78,6 @@ export async function GET(
     })
   }
 }
+
+
+//! CHANGED FOR DEPLOYMENT

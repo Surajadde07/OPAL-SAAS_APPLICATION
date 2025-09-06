@@ -2,6 +2,10 @@ import { currentUser } from '@clerk/nextjs/server'
 import { NextResponse } from 'next/server'
 import Stripe from 'stripe'
 
+// Force dynamic rendering for this API route
+export const dynamic = 'force-dynamic'
+export const runtime = 'nodejs'
+
 const stripe = new Stripe(process.env.STRIPE_CLIENT_SECRET as string)
 
 export async function GET() {
@@ -31,3 +35,6 @@ export async function GET() {
 
   return NextResponse.json({ status: 400 })
 }
+
+
+//! CHANGED FOR DEPLOYMENT

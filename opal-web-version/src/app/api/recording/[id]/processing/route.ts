@@ -1,6 +1,10 @@
 import { client } from '@/lib/prisma'
 import { NextRequest, NextResponse } from 'next/server'
 
+// Force dynamic rendering for this API route
+export const dynamic = 'force-dynamic'
+export const runtime = 'nodejs'
+
 export async function POST(
   req: NextRequest,
   { params }: { params: { id: string } }
@@ -80,4 +84,5 @@ export async function POST(
   }
 }
 
-//! CHANGED
+
+//! CHANGED FOR DEPLOYMENT
