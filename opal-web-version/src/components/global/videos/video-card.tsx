@@ -59,7 +59,11 @@ const VideoCard = (props: Props) => {
             className="w-full aspect-video opacity-50 z-20"
           >
             <source
-              src={`${process.env.NEXT_PUBLIC_CLOUD_FRONT_STREAM_URL}/${props.source}#t=1`}
+              src={props.source.startsWith('http') 
+                ? props.source.replace('/upload/', '/upload/f_mp4/').replace('.webm', '.mp4') + '#t=1'
+                : `https://res.cloudinary.com/doydgo6zc/video/upload/f_mp4/${props.source}#t=1`
+              }
+              type="video/mp4"
             />
           </video>
           <div className="px-5 py-3 flex flex-col gap-7-2 z-20">
@@ -102,3 +106,6 @@ const VideoCard = (props: Props) => {
 }
 
 export default VideoCard
+
+
+//! CHANGED

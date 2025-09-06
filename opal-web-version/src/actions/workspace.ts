@@ -72,6 +72,7 @@ export const getAllUserVideos = async (workSpaceId: string) => {
   try {
     const user = await currentUser()
     if (!user) return { status: 404 }
+    
     const videos = await client.video.findMany({
       where: {
         OR: [{ workSpaceId }, { folderId: workSpaceId }],
@@ -524,3 +525,4 @@ export const getWorkspaceMembers = async (workspaceId: string) => {
     return { status: 400, data: [] }
   }
 }
+//! CHANGED

@@ -12,6 +12,10 @@ export async function POST(
 
   const content = JSON.parse(body.content)
 
+  console.log('� Processing transcription for user:', id)
+  console.log('📝 Title:', content.title)
+  console.log('📝 Summary:', content.summary)
+
   const transcribed = await client.video.update({
     where: {
       userId: id,
@@ -61,3 +65,6 @@ export async function POST(
 
   return NextResponse.json({ status: 400 })
 }
+
+
+//! CHANGED

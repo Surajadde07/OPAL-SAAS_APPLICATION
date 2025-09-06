@@ -97,7 +97,6 @@ export const onAuthenticateUser = async () => {
     }
     return { status: 400 }
   } catch (error) {
-    console.log('🔴 ERROR', error)
     return { status: 500 }
   }
 }
@@ -501,3 +500,5 @@ export const completeSubscription = async (session_id: string) => {
     return { status: 400 }
   }
 }
+
+//! CHANGED

@@ -16,7 +16,10 @@ const RichLink = ({ description, id, source, title }: Props) => {
         >
             <source
                 type="video/webm"
-                src="${process.env.NEXT_PUBLIC_CLOUD_FRONT_STREAM_URL}/${source}"
+                src="${source.startsWith('http') 
+                  ? source 
+                  : `https://res.cloudinary.com/dzqfvgk64/video/upload/${source}`
+                }"
             />
         </video>
     </a>`
@@ -45,3 +48,6 @@ const RichLink = ({ description, id, source, title }: Props) => {
 }
 
 export default RichLink
+
+
+//! CHANGED

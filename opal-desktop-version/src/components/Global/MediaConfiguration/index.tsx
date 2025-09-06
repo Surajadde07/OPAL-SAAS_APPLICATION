@@ -41,7 +41,7 @@ const MediaConfiguration = ({ state, user }: Props) => {
     )
 
     const { isPending, onPreset , register} = useStudioSettings(
-        user!.id,
+        user!.clerkid, // Use Clerk ID instead of database ID
         user?.studio?.screen || state.displays?.[0]?.id,
         user?.studio?.mic || state.audioInputs?.[0]?.deviceId,
         user?.studio?.preset,
@@ -114,3 +114,5 @@ export default MediaConfiguration
 
 //? 11:48:04
 //? 12:44:24
+
+//! CHANGED

@@ -75,8 +75,20 @@ const VideoPreview = ({ videoId }: Props) => {
           controls
         >
           <source
-            src={`${process.env.NEXT_PUBLIC_CLOUD_FRONT_STREAM_URL}/${video.source}#1`}
+            src={video.source.startsWith('http') 
+              ? video.source.replace('/upload/', '/upload/f_mp4,q_auto/')
+              : `https://res.cloudinary.com/doydgo6zc/video/upload/f_mp4,q_auto/${video.source}`
+            }
+            type="video/mp4"
           />
+          <source
+            src={video.source.startsWith('http') 
+              ? video.source
+              : `https://res.cloudinary.com/doydgo6zc/video/upload/${video.source}`
+            }
+            type="video/webm"
+          />
+          Your browser does not support the video tag.
         </video>
         <div className="flex flex-col text-2xl gap-y-4">
           <div className="flex gap-x-5 items-center justify-between">
@@ -134,3 +146,6 @@ const VideoPreview = ({ videoId }: Props) => {
 }
 
 export default VideoPreview
+
+
+//! CHANGED

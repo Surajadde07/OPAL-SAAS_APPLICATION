@@ -23,7 +23,7 @@ import { clerkMiddleware, createRouteMatcher } from '@clerk/nextjs/server'
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 
-const allowedOrigins = ['http://localhost:5173', 'http://localhost:3000', 'http://localhost:3001']
+const allowedOrigins = ['http://localhost:5173', 'http://localhost:3000', 'http://localhost:3001', 'http://localhost:5001']
 
 const corsOptions = {
   'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
@@ -31,6 +31,7 @@ const corsOptions = {
 }
 
 const isProtectedRoutes = createRouteMatcher(['/dashboard(.*)', '/payment(.*)'])
+const isRecordingRoute = createRouteMatcher(['/api/recording(.*)'])
 
 export default clerkMiddleware(async (auth, req: NextRequest) => {
   const origin = req.headers.get('origin') ?? ''
@@ -43,6 +44,18 @@ export default clerkMiddleware(async (auth, req: NextRequest) => {
       ...corsOptions,
     }
     return NextResponse.json({}, { headers: preflightHeaders })
+  }
+
+  // Skip authentication for recording API routes (called by Express server)
+  if (isRecordingRoute(req)) {
+    const response = NextResponse.next()
+    if (isAllowedOrigin) {
+      response.headers.set('Access-Control-Allow-Origin', origin)
+    }
+    Object.entries(corsOptions).forEach(([key, value]) => {
+      response.headers.set(key, value)
+    })
+    return response
   }
 
   // Handle protected routes
@@ -70,3 +83,5 @@ export const config = {
     '/(api|trpc)(.*)',
   ],
 }
+
+//! CHANGED

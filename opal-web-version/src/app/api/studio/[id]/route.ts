@@ -9,10 +9,13 @@ export async function POST(
   const { id } = params
   const body = await req.json()
 
+  // Check if the ID is a Clerk ID (starts with 'user_') or database ID
+  const whereClause = id.startsWith('user_') 
+    ? { clerkid: id }  // It's a Clerk ID
+    : { id }           // It's a database ID
+
   const studio = await client.user.update({
-    where: {
-      id,
-    },
+    where: whereClause,
     data: {
       studio: {
         update: {
@@ -34,3 +37,5 @@ export async function POST(
 }
 
 //? 13:16:31
+
+//! CHANGED

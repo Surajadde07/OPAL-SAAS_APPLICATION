@@ -115,7 +115,8 @@ export const startRecordingWithSources = () => {
     try {
         hidePluginWindow(true);
         videoTransferFileName = `${uuid()}-recording.webm`;
-        userId = 'default-user-id'; // You might want to pass this as parameter
+        // userId is already set from onSources?.id in selectSources function
+        console.log('Using authenticated user ID:', userId);
         
         mediaRecorder.start(1000);
         console.log('Recording started successfully');
@@ -128,3 +129,5 @@ export const startRecordingWithSources = () => {
 }
 
 //? 13:42:23
+
+//! CHANGED
