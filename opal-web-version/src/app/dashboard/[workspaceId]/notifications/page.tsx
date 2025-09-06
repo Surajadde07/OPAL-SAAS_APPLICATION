@@ -6,6 +6,9 @@ import { QueryClient } from '@tanstack/react-query'
 import { User } from 'lucide-react'
 import React from 'react'
 
+// Force dynamic rendering for this page
+export const dynamic = 'force-dynamic'
+
 type Props = {}
 
 const Notifications = (props: Props) => {

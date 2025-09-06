@@ -2,6 +2,9 @@ import { completeSubscription } from '@/actions/user'
 import { redirect } from 'next/navigation'
 import React from 'react'
 
+// Force dynamic rendering for this page
+export const dynamic = 'force-dynamic'
+
 type Props = {
   searchParams: { session_id?: string; cancel?: boolean }
 }
@@ -25,3 +28,5 @@ const page = async ({ searchParams: { cancel, session_id } }: Props) => {
 }
 
 export default page
+
+//! CHANGED FOR DEPLOYMENT

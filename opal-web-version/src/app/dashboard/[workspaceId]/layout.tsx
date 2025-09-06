@@ -15,6 +15,10 @@ import {
 import Sidebar from '@/components/global/sidebar'
 import GlobalHeader from '@/components/global/global-header'
 
+
+// Force dynamic rendering for this layout
+export const dynamic = 'force-dynamic'
+
 type Props = {
   params: { workspaceId: string }
   children: React.ReactNode
