@@ -1,6 +1,10 @@
 import { onAuthenticateUser } from '@/actions/user'
 import { redirect } from 'next/navigation'
 
+// Force dynamic rendering to prevent build-time execution
+export const dynamic = 'force-dynamic'
+export const runtime = 'nodejs'
+
 const AuthCallbackPage = async () => {
   const auth = await onAuthenticateUser()
   console.log(auth)

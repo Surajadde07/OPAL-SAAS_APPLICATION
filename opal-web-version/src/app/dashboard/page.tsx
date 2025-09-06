@@ -2,6 +2,10 @@ import { onAuthenticateUser } from '@/actions/user'
 import { redirect } from 'next/navigation'
 import React from 'react'
 
+// Force dynamic rendering to prevent build-time execution
+export const dynamic = 'force-dynamic'
+export const runtime = 'nodejs'
+
 type Props = {}
 
 const DasboardPage = async (props: Props) => {
@@ -16,3 +20,6 @@ const DasboardPage = async (props: Props) => {
 }
 
 export default DasboardPage
+
+
+//! CHANGED FOR DEPLOYMENT

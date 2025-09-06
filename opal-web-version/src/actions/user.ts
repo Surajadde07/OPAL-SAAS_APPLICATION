@@ -34,6 +34,23 @@ export const sendEmail = async (
 
 export const onAuthenticateUser = async () => {
   try {
+    // Skip authentication during build time
+    if (process.env.NODE_ENV === 'development' && process.env.VERCEL_ENV !== 'production') {
+      // Check if we're in build context (no request context available)
+      try {
+        const user = await currentUser()
+        if (!user) {
+          return { status: 403 }
+        }
+      } catch (buildError) {
+        // If currentUser fails during build, return mock data
+        return { 
+          status: 403,
+          message: 'Build time - no authentication available'
+        }
+      }
+    }
+
     const user = await currentUser()
     if (!user) {
       return { status: 403 }
@@ -501,4 +518,5 @@ export const completeSubscription = async (session_id: string) => {
   }
 }
 
-//! CHANGED
+
+//! CHANGED FOR DEPLOYMENT

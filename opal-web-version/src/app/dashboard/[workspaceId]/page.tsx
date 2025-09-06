@@ -4,6 +4,11 @@ import {
   getWorkspaceFolders,
   getWorkSpaces,
 } from '@/actions/workspace'
+
+// Force dynamic rendering to prevent build-time execution
+export const dynamic = 'force-dynamic'
+export const runtime = 'nodejs'
+
 import CreateForlders from '@/components/global/create-folders'
 import CreateWorkspace from '@/components/global/create-workspace'
 import Folders from '@/components/global/folders'
@@ -72,3 +77,6 @@ const Page = async ({ params: { workspaceId } }: Props) => {
 }
 
 export default Page
+
+
+//! CHANGED FOR DEPLOYMENT
