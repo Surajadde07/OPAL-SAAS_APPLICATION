@@ -11,6 +11,9 @@ import { useTheme } from 'next-themes'
 import { useEffect, useState } from 'react'
 import { toast } from 'sonner'
 
+// Force dynamic rendering for this page
+export const dynamic = 'force-dynamic'
+
 const SettingsPage = () => {
   const [firstView, setFirstView] = useState<undefined | boolean>(undefined)
   const { setTheme, theme } = useTheme()
