@@ -27,8 +27,12 @@ cloudinary.config({
 
 const io = new Server(server, {
     cors: {
-        origin: process.env.ELECTRON_HOST,
-        methods: ["GET", "POST"]
+        origin: [
+            process.env.ELECTRON_HOST || "http://localhost:5173",
+            process.env.WEB_APP_URL || "http://localhost:3000"
+        ],
+        methods: ["GET", "POST"],
+        credentials: true
     },
 })
 
@@ -187,6 +191,8 @@ server.listen(5001, () => {
     console.log('🟢 Listening to port 5001')
     console.log('📹 Using Cloudinary for video storage and processing')
 })
+
+//! CHANGED FOR DEPLOYMENT
 
 
 //? 13:58:16
