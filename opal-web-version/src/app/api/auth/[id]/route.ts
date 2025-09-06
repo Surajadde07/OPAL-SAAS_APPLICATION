@@ -13,8 +13,8 @@ export async function GET(
   console.log('Endpoint hit ✅')
 
   try {
-    // Skip database operations during build time
-    if (process.env.NODE_ENV === 'development' && !process.env.DATABASE_URL) {
+    // Skip database operations during build time or if no DATABASE_URL
+    if (!process.env.DATABASE_URL || process.env.NEXT_PHASE === 'phase-production-build' || !client) {
       return NextResponse.json({ 
         status: 503, 
         message: 'Database not available during build' 
@@ -78,6 +78,4 @@ export async function GET(
     })
   }
 }
-
-
 //! CHANGED FOR DEPLOYMENT

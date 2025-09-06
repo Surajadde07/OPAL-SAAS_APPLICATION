@@ -4,6 +4,20 @@ declare global {
   var prisma: PrismaClient | undefined
 }
 
-export const client = globalThis.prisma || new PrismaClient()
+// Safe Prisma client that handles build-time scenarios
+function createPrismaClient() {
+  // Skip Prisma client creation during build time
+  if (process.env.NEXT_PHASE === 'phase-production-build' || !process.env.DATABASE_URL) {
+    return null as any; // Return null during build
+  }
+  return new PrismaClient()
+}
 
-if (process.env.NODE_ENV !== 'production') globalThis.prisma = client
+export const client = globalThis.prisma || createPrismaClient()
+
+if (process.env.NODE_ENV !== 'production' && client) {
+  globalThis.prisma = client
+}
+
+
+//! CHANGED FOR DEPLOYMENT
