@@ -6,9 +6,17 @@ export async function GET(
   req: NextRequest,
   { params: { id } }: { params: { id: string } }
 ) {
-  console.log('Enpoint hit ✅')
+  console.log('Endpoint hit ✅')
 
   try {
+    // Skip database operations during build time
+    if (process.env.NODE_ENV === 'development' && !process.env.DATABASE_URL) {
+      return NextResponse.json({ 
+        status: 503, 
+        message: 'Database not available during build' 
+      })
+    }
+
     const userProfile = await client.user.findUnique({
       where: {
         clerkid: id,
@@ -58,5 +66,11 @@ export async function GET(
     return NextResponse.json({ status: 400 })
   } catch (error) {
     console.log('ERROR', error)
+    // Return proper error response instead of undefined
+    return NextResponse.json({ 
+      status: 500, 
+      error: 'Internal server error',
+      message: process.env.NODE_ENV === 'development' ? error : 'Database connection failed'
+    })
   }
 }
