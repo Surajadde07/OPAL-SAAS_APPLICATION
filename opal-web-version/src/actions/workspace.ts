@@ -1,6 +1,6 @@
 'use server'
 
-import { prisma } from '@/lib/prisma'
+import  prisma  from '@/lib/prisma'
 import { currentUser } from '@clerk/nextjs/server'
 import { sendEmail } from './user'
 // import { createprisma, OAuthStrategy } from '@wix/sdk'

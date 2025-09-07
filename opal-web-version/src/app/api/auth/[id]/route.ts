@@ -12,7 +12,7 @@ export async function GET(
 
   try {
     // Import these dynamically to avoid build-time issues
-    const { prisma } = await import('@/lib/prisma')
+    const { default: prisma } = await import('@/lib/prisma')
     const { clerkClient } = await import('@clerk/nextjs/server')
 
     const userProfile = await prisma.user.findUnique({
