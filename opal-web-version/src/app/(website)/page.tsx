@@ -1,28 +1,21 @@
-'use client'
-import { useUser } from '@clerk/nextjs'
-import { useRouter } from 'next/navigation'
-import { useEffect } from 'react'
+import { currentUser } from '@clerk/nextjs/server'
+import { redirect } from 'next/navigation'
 
-export default function Home() {
-  const { isLoaded, isSignedIn } = useUser()
-  const router = useRouter()
+// Force dynamic rendering
+export const dynamic = 'force-dynamic'
+
+export default async function Home() {
+  // Check if user is authenticated on server side
+  const user = await currentUser()
   
-  useEffect(() => {
-    if (isLoaded) {
-      if (isSignedIn) {
-        // If user is already logged in, redirect to dashboard
-        router.push('/dashboard')
-      } else {
-        // If not logged in, redirect to sign-in page
-        router.push('/auth/sign-in')
-      }
-    }
-  }, [isLoaded, isSignedIn, router])
+  if (user) {
+    // If user is signed in, redirect to auth callback to handle dashboard routing
+    redirect('/auth/callback')
+  } else {
+    // If not signed in, redirect to sign-in page
+    redirect('/auth/sign-in')
+  }
 
-  // Show loading state while checking authentication
-  return (
-    <main className="flex items-center justify-center min-h-screen">
-      <div className="text-white">Loading...</div>
-    </main>
-  )
+  // This return should never be reached due to redirects above
+  return null
 }
