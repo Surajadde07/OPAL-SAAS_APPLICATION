@@ -1,0 +1,13 @@
+{
+    "framework": "nextjs",
+    "buildCommand": "bun run build",
+    "installCommand": "bun install",
+    "functions": {
+        "src/app/api/**/*.ts": {
+            "maxDuration": 30
+        }
+    },
+    "env": {
+        "NEXT_TELEMETRY_DISABLED": "1"
+    }
+}
