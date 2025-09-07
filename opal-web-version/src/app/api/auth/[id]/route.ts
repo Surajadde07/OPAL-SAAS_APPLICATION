@@ -13,11 +13,12 @@ export async function GET(
   console.log('Endpoint hit ✅')
 
   try {
-    // Skip database operations during build time or if no DATABASE_URL
-    if (!process.env.DATABASE_URL || process.env.NEXT_PHASE === 'phase-production-build' || !client) {
+    // Add database connection check
+    if (!process.env.DATABASE_URL) {
+      console.error('DATABASE_URL not configured')
       return NextResponse.json({ 
-        status: 503, 
-        message: 'Database not available during build' 
+        status: 500, 
+        error: 'Database not configured' 
       })
     }
 
@@ -69,13 +70,14 @@ export async function GET(
 
     return NextResponse.json({ status: 400 })
   } catch (error) {
-    console.log('ERROR', error)
-    // Return proper error response instead of undefined
+    console.error('Auth API Error:', error)
+    // Return more detailed error information for debugging
     return NextResponse.json({ 
       status: 500, 
       error: 'Internal server error',
-      message: process.env.NODE_ENV === 'development' ? error : 'Database connection failed'
+      details: process.env.NODE_ENV === 'development' ? String(error) : 'Authentication failed'
     })
   }
 }
+
 //! CHANGED FOR DEPLOYMENT

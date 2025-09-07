@@ -34,26 +34,15 @@ export const sendEmail = async (
 
 export const onAuthenticateUser = async () => {
   try {
-    // Skip authentication during build time
-    if (process.env.NODE_ENV === 'development' && process.env.VERCEL_ENV !== 'production') {
-      // Check if we're in build context (no request context available)
-      try {
-        const user = await currentUser()
-        if (!user) {
-          return { status: 403 }
-        }
-      } catch (buildError) {
-        // If currentUser fails during build, return mock data
-        return { 
-          status: 403,
-          message: 'Build time - no authentication available'
-        }
-      }
-    }
-
     const user = await currentUser()
     if (!user) {
       return { status: 403 }
+    }
+
+    // Add database connection check
+    if (!process.env.DATABASE_URL) {
+      console.error('DATABASE_URL not configured')
+      return { status: 500, error: 'Database not configured' }
     }
 
     const userExist = await client.user.findUnique({
@@ -114,7 +103,12 @@ export const onAuthenticateUser = async () => {
     }
     return { status: 400 }
   } catch (error) {
-    return { status: 500 }
+    console.error('Authentication error:', error)
+    return { 
+      status: 500, 
+      error: 'Authentication failed',
+      details: process.env.NODE_ENV === 'development' ? String(error) : undefined
+    }
   }
 }
 
