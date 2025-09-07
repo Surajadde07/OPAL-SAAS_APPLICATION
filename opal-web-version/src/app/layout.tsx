@@ -22,7 +22,13 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <ClerkProvider>
+    <ClerkProvider
+      publishableKey={process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY}
+      afterSignInUrl="/auth/callback"
+      afterSignUpUrl="/auth/callback"
+      signInUrl="/auth/sign-in"
+      signUpUrl="/auth/sign-up"
+    >
       <html lang="en">
         <body className={`${manrope.className} bg-[#171717]`}>
           <ThemeProvider

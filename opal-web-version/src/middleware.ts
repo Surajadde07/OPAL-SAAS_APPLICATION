@@ -23,7 +23,14 @@ import { clerkMiddleware, createRouteMatcher } from '@clerk/nextjs/server'
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 
-const allowedOrigins = ['http://localhost:5173', 'http://localhost:3000', 'http://localhost:3001', 'http://localhost:5001']
+const allowedOrigins = [
+  'http://localhost:5173', 
+  'http://localhost:3000', 
+  'http://localhost:3001', 
+  'http://localhost:5001',
+  'https://opal-saas-application-1mjg.vercel.app', // Add your production domain
+  process.env.NEXT_PUBLIC_HOST_URL || ''
+].filter(Boolean)
 
 const corsOptions = {
   'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
