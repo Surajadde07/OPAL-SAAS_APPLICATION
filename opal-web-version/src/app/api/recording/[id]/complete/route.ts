@@ -1,4 +1,3 @@
-import  prisma  from '@/lib/prisma'
 import { NextRequest, NextResponse } from 'next/server'
 
 // Force dynamic rendering for this API route
@@ -17,6 +16,9 @@ export async function POST(
   }
 
   try {
+    // Import prisma dynamically to avoid build-time issues
+    const { default: prisma } = await import('@/lib/prisma')
+    
     // Find user by Clerk ID
     const user = await prisma.user.findUnique({
       where: { clerkid: id },

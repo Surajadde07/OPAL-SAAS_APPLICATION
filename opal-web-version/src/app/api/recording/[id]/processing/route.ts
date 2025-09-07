@@ -1,4 +1,3 @@
-import  prisma  from '@/lib/prisma'
 import { NextRequest, NextResponse } from 'next/server'
 
 // Force dynamic rendering for this API route
@@ -10,6 +9,9 @@ export async function POST(
   { params }: { params: { id: string } }
 ) {
   try {
+    // Import prisma dynamically to avoid build-time issues
+    const { default: prisma } = await import('@/lib/prisma')
+    
     const body = await req.json()
     const { id } = params
 
