@@ -1,5 +1,3 @@
-import { client } from '@/lib/prisma'
-import { clerkClient } from '@clerk/nextjs/server'
 import { NextRequest, NextResponse } from 'next/server'
 
 // Force dynamic rendering for this API route
@@ -13,6 +11,10 @@ export async function GET(
   console.log('Endpoint hit ✅')
 
   try {
+    // Import these dynamically to avoid build-time issues
+    const { client } = await import('@/lib/prisma')
+    const { clerkClient } = await import('@clerk/nextjs/server')
+
     const userProfile = await client.user.findUnique({
       where: {
         clerkid: id,
@@ -74,5 +76,6 @@ export async function GET(
     })
   }
 }
+
 
 //! CHANGED FOR DEPLOYMENT
