@@ -12,10 +12,10 @@ export async function GET(
 
   try {
     // Import these dynamically to avoid build-time issues
-    const { client } = await import('@/lib/prisma')
+    const { prisma } = await import('@/lib/prisma')
     const { clerkClient } = await import('@clerk/nextjs/server')
 
-    const userProfile = await client.user.findUnique({
+    const userProfile = await prisma.user.findUnique({
       where: {
         clerkid: id,
       },
@@ -35,7 +35,7 @@ export async function GET(
 
     // User doesn't exist, create new user
     const clerkUserInstance = await clerkClient.users.getUser(id)
-    const createUser = await client.user.create({
+    const createUser = await prisma.user.create({
       data: {
         clerkid: id,
         email: clerkUserInstance.emailAddresses[0].emailAddress,

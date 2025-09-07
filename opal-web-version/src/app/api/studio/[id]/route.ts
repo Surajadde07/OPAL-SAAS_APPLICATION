@@ -1,4 +1,4 @@
-import { client } from '@/lib/prisma'
+import { prisma } from '@/lib/prisma'
 import { NextRequest, NextResponse } from 'next/server'
 
 // Force dynamic rendering for this API route
@@ -18,7 +18,7 @@ export async function POST(
     ? { clerkid: id }  // It's a Clerk ID
     : { id }           // It's a database ID
 
-  const studio = await client.user.update({
+  const studio = await prisma.user.update({
     where: whereClause,
     data: {
       studio: {

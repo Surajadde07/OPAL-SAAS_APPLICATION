@@ -1,4 +1,4 @@
-import { client } from '@/lib/prisma'
+import { prisma } from '@/lib/prisma'
 import axios from 'axios'
 import { NextRequest, NextResponse } from 'next/server'
 
@@ -20,7 +20,7 @@ export async function POST(
   console.log('📝 Title:', content.title)
   console.log('📝 Summary:', content.summary)
 
-  const transcribed = await client.video.update({
+  const transcribed = await prisma.video.update({
     where: {
       userId: id,
       source: body.filename,

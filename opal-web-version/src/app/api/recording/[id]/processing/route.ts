@@ -1,4 +1,4 @@
-import { client } from '@/lib/prisma'
+import { prisma } from '@/lib/prisma'
 import { NextRequest, NextResponse } from 'next/server'
 
 // Force dynamic rendering for this API route
@@ -19,7 +19,7 @@ export async function POST(
     }
 
     // Look up user by Clerk ID instead of database ID
-    const user = await client.user.findUnique({
+    const user = await prisma.user.findUnique({
       where: {
         clerkid: id, // Use clerkid field instead of id
       },
@@ -47,7 +47,7 @@ export async function POST(
       return NextResponse.json({ status: 404, message: 'No workspace found' })
     }
 
-    const startProcessingVideo = await client.workSpace.update({
+    const startProcessingVideo = await prisma.workSpace.update({
       where: {
         id: user.workspace[0].id, // Use user.workspace instead of personalworkspaceId
       },

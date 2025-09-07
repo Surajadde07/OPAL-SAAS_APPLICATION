@@ -1,11 +1,11 @@
 'use server'
 
-import { client } from '@/lib/prisma'
+import { prisma } from '@/lib/prisma'
 import { currentUser } from '@clerk/nextjs/server'
 import nodemailer from 'nodemailer'
 import Stripe from 'stripe'
 
-const stripe = new Stripe(process.env.STRIPE_CLIENT_SECRET as string)
+const stripe = new Stripe(process.env.STRIPE_prisma_SECRET as string)
 
 export const sendEmail = async (
   to: string,
@@ -45,7 +45,7 @@ export const onAuthenticateUser = async () => {
       return { status: 500, error: 'Database not configured' }
     }
 
-    const userExist = await client.user.findUnique({
+    const userExist = await prisma.user.findUnique({
       where: {
         clerkid: user.id,
       },
@@ -63,7 +63,7 @@ export const onAuthenticateUser = async () => {
       return { status: 200, user: userExist }
     }
     
-    const newUser = await client.user.create({
+    const newUser = await prisma.user.create({
       data: {
         clerkid: user.id,
         email: user.emailAddresses[0].emailAddress,
@@ -116,7 +116,7 @@ export const getNotifications = async () => {
   try {
     const user = await currentUser()
     if (!user) return { status: 404 }
-    const notifications = await client.user.findUnique({
+    const notifications = await prisma.user.findUnique({
       where: {
         clerkid: user.id,
       },
@@ -143,7 +143,7 @@ export const searchUsers = async (query: string) => {
     const user = await currentUser()
     if (!user) return { status: 404 }
 
-    const users = await client.user.findMany({
+    const users = await prisma.user.findMany({
       where: {
         OR: [
           { firstname: { contains: query } },
@@ -181,7 +181,7 @@ export const getPaymentInfo = async () => {
     const user = await currentUser()
     if (!user) return { status: 404 }
 
-    const payment = await client.user.findUnique({
+    const payment = await prisma.user.findUnique({
       where: {
         clerkid: user.id,
       },
@@ -205,7 +205,7 @@ export const enableFirstView = async (state: boolean) => {
 
     if (!user) return { status: 404 }
 
-    const view = await client.user.update({
+    const view = await prisma.user.update({
       where: {
         clerkid: user.id,
       },
@@ -226,7 +226,7 @@ export const getFirstView = async () => {
   try {
     const user = await currentUser()
     if (!user) return { status: 404 }
-    const userData = await client.user.findUnique({
+    const userData = await prisma.user.findUnique({
       where: {
         clerkid: user.id,
       },
@@ -251,7 +251,7 @@ export const createCommentAndReply = async (
 ) => {
   try {
     if (commentId) {
-      const reply = await client.comment.update({
+      const reply = await prisma.comment.update({
         where: {
           id: commentId,
         },
@@ -270,7 +270,7 @@ export const createCommentAndReply = async (
       }
     }
 
-    const newComment = await client.video.update({
+    const newComment = await prisma.video.update({
       where: {
         id: videoId,
       },
@@ -293,7 +293,7 @@ export const getUserProfile = async () => {
   try {
     const user = await currentUser()
     if (!user) return { status: 404 }
-    const profileIdAndImage = await client.user.findUnique({
+    const profileIdAndImage = await prisma.user.findUnique({
       where: {
         clerkid: user.id,
       },
@@ -311,7 +311,7 @@ export const getUserProfile = async () => {
 
 export const getVideoComments = async (Id: string) => {
   try {
-    const comments = await client.comment.findMany({
+    const comments = await prisma.comment.findMany({
       where: {
         OR: [{ videoId: Id }, { commentId: Id }],
         commentId: null,
@@ -340,7 +340,7 @@ export const inviteMembers = async (
   try {
     const user = await currentUser()
     if (!user) return { status: 404 }
-    const senderInfo = await client.user.findUnique({
+    const senderInfo = await prisma.user.findUnique({
       where: {
         clerkid: user.id,
       },
@@ -351,7 +351,7 @@ export const inviteMembers = async (
       },
     })
     if (senderInfo?.id) {
-      const workspace = await client.workSpace.findUnique({
+      const workspace = await prisma.workSpace.findUnique({
         where: {
           id: workspaceId,
         },
@@ -360,7 +360,7 @@ export const inviteMembers = async (
         },
       })
       if (workspace) {
-        const invitation = await client.invite.create({
+        const invitation = await prisma.invite.create({
           data: {
             senderId: senderInfo.id,
             recieverId,
@@ -372,7 +372,7 @@ export const inviteMembers = async (
           },
         })
 
-        await client.user.update({
+        await prisma.user.update({
           where: {
             clerkid: user.id,
           },
@@ -422,7 +422,7 @@ export const acceptInvite = async (inviteId: string) => {
       return {
         status: 404,
       }
-    const invitation = await client.invite.findUnique({
+    const invitation = await prisma.invite.findUnique({
       where: {
         id: inviteId,
       },
@@ -442,7 +442,7 @@ export const acceptInvite = async (inviteId: string) => {
     console.log('🔍 Receiver clerk ID:', invitation?.reciever?.clerkid)
 
     if (user.id !== invitation?.reciever?.clerkid) return { status: 401 }
-    const acceptInvite = client.invite.update({
+    const acceptInvite = prisma.invite.update({
       where: {
         id: inviteId,
       },
@@ -451,7 +451,7 @@ export const acceptInvite = async (inviteId: string) => {
       },
     })
 
-    const updateMember = client.user.update({
+    const updateMember = prisma.user.update({
       where: {
         clerkid: user.id,
       },
@@ -464,7 +464,7 @@ export const acceptInvite = async (inviteId: string) => {
       },
     })
 
-    const membersTransaction = await client.$transaction([
+    const membersTransaction = await prisma.$transaction([
       acceptInvite,
       updateMember,
     ])
@@ -487,7 +487,7 @@ export const completeSubscription = async (session_id: string) => {
 
     const session = await stripe.checkout.sessions.retrieve(session_id)
     if (session) {
-      const customer = await client.user.update({
+      const customer = await prisma.user.update({
         where: {
           clerkid: user.id,
         },

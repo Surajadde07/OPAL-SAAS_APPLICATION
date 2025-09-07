@@ -1,9 +1,9 @@
 'use server'
 
-import { client } from '@/lib/prisma'
+import { prisma } from '@/lib/prisma'
 import { currentUser } from '@clerk/nextjs/server'
 import { sendEmail } from './user'
-import { createClient, OAuthStrategy } from '@wix/sdk'
+// import { createprisma, OAuthStrategy } from '@wix/sdk'
 import { items } from '@wix/data'
 import axios from 'axios'
 
@@ -12,7 +12,7 @@ export const verifyAccessToWorkspace = async (workspaceId: string) => {
     const user = await currentUser()
     if (!user) return { status: 403 }
 
-    const isUserInWorkspace = await client.workSpace.findUnique({
+    const isUserInWorkspace = await prisma.workSpace.findUnique({
       where: {
         id: workspaceId,
         OR: [
@@ -47,7 +47,7 @@ export const verifyAccessToWorkspace = async (workspaceId: string) => {
 
 export const getWorkspaceFolders = async (workSpaceId: string) => {
   try {
-    const isFolders = await client.folder.findMany({
+    const isFolders = await prisma.folder.findMany({
       where: {
         workSpaceId,
       },
@@ -73,7 +73,7 @@ export const getAllUserVideos = async (workSpaceId: string) => {
     const user = await currentUser()
     if (!user) return { status: 404 }
     
-    const videos = await client.video.findMany({
+    const videos = await prisma.video.findMany({
       where: {
         OR: [{ workSpaceId }, { folderId: workSpaceId }],
       },
@@ -118,7 +118,7 @@ export const getWorkSpaces = async () => {
 
     if (!user) return { status: 404 }
 
-    const workspaces = await client.user.findUnique({
+    const workspaces = await prisma.user.findUnique({
       where: {
         clerkid: user.id,
       },
@@ -161,7 +161,7 @@ export const createWorkspace = async (name: string) => {
   try {
     const user = await currentUser()
     if (!user) return { status: 404 }
-    const authorized = await client.user.findUnique({
+    const authorized = await prisma.user.findUnique({
       where: {
         clerkid: user.id,
       },
@@ -175,7 +175,7 @@ export const createWorkspace = async (name: string) => {
     })
 
     if (authorized?.subscription?.plan === 'PRO') {
-      const workspace = await client.user.update({
+      const workspace = await prisma.user.update({
         where: {
           clerkid: user.id,
         },
@@ -203,7 +203,7 @@ export const createWorkspace = async (name: string) => {
 
 export const renameFolders = async (folderId: string, name: string) => {
   try {
-    const folder = await client.folder.update({
+    const folder = await prisma.folder.update({
       where: {
         id: folderId,
       },
@@ -222,7 +222,7 @@ export const renameFolders = async (folderId: string, name: string) => {
 
 export const createFolder = async (workspaceId: string) => {
   try {
-    const isNewFolder = await client.workSpace.update({
+    const isNewFolder = await prisma.workSpace.update({
       where: {
         id: workspaceId,
       },
@@ -242,7 +242,7 @@ export const createFolder = async (workspaceId: string) => {
 
 export const getFolderInfo = async (folderId: string) => {
   try {
-    const folder = await client.folder.findUnique({
+    const folder = await prisma.folder.findUnique({
       where: {
         id: folderId,
       },
@@ -278,7 +278,7 @@ export const moveVideoLocation = async (
   folderId: string
 ) => {
   try {
-    const location = await client.video.update({
+    const location = await prisma.video.update({
       where: {
         id: videoId,
       },
@@ -298,7 +298,7 @@ export const getPreviewVideo = async (videoId: string) => {
   try {
     const user = await currentUser()
     if (!user) return { status: 404 }
-    const video = await client.video.findUnique({
+    const video = await prisma.video.findUnique({
       where: {
         id: videoId,
       },
@@ -344,7 +344,7 @@ export const sendEmailForFirstView = async (videoId: string) => {
   try {
     const user = await currentUser()
     if (!user) return { status: 404 }
-    const firstViewSettings = await client.user.findUnique({
+    const firstViewSettings = await prisma.user.findUnique({
       where: { clerkid: user.id },
       select: {
         firstView: true,
@@ -352,7 +352,7 @@ export const sendEmailForFirstView = async (videoId: string) => {
     })
     if (!firstViewSettings?.firstView) return
 
-    const video = await client.video.findUnique({
+    const video = await prisma.video.findUnique({
       where: {
         id: videoId,
       },
@@ -367,7 +367,7 @@ export const sendEmailForFirstView = async (videoId: string) => {
       },
     })
     if (video && video.views === 0) {
-      await client.video.update({
+      await prisma.video.update({
         where: {
           id: videoId,
         },
@@ -386,7 +386,7 @@ export const sendEmailForFirstView = async (videoId: string) => {
         if (error) {
           console.log(error.message)
         } else {
-          const notification = await client.user.update({
+          const notification = await prisma.user.update({
             where: { clerkid: user.id },
             data: {
               notification: {
@@ -413,7 +413,7 @@ export const editVideoInfo = async (
   description: string
 ) => {
   try {
-    const video = await client.video.update({
+    const video = await prisma.video.update({
       where: { id: videoId },
       data: {
         title,
@@ -434,15 +434,15 @@ export const getWixContent = async () => {
     return { items: [] }
     
     /* 
-    const myWixClient = createClient({
+    const myWixprisma = createprisma({
       modules: { items },
       auth: OAuthStrategy({
-        clientId: process.env.WIX_OAUTH_KEY as string,
+        prismaId: process.env.WIX_OAUTH_KEY as string,
       }),
     })
 
     // Use the correct Wix SDK method - items.query for data collections
-    const videos = await myWixClient.items
+    const videos = await myWixprisma.items
       .queryDataItems({ dataCollectionId: 'opal-videos' })
       .find()
 
@@ -453,7 +453,7 @@ export const getWixContent = async () => {
     const video = [] as any[]
 
     /* 
-    const video = await client.video.findMany({
+    const video = await prisma.video.findMany({
       where: {
         id: {
           in: videoIds,
@@ -502,7 +502,7 @@ export const howToPost = async () => {
 
 export const getWorkspaceMembers = async (workspaceId: string) => {
   try {
-    const members = await client.member.findMany({
+    const members = await prisma.member.findMany({
       where: {
         workSpaceId: workspaceId,
       },
