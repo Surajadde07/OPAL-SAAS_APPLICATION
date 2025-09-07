@@ -28,6 +28,8 @@ export default function RootLayout({
       afterSignUpUrl="/auth/callback"
       signInUrl="/auth/sign-in"
       signUpUrl="/auth/sign-up"
+      signInFallbackRedirectUrl="/auth/callback"
+      signUpFallbackRedirectUrl="/auth/callback"
     >
       <html lang="en">
         <body className={`${manrope.className} bg-[#171717]`}>
