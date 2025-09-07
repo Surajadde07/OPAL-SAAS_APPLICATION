@@ -1,17 +1,23 @@
 'use server'
 
-import  prisma  from '@/lib/prisma'
 import { currentUser } from '@clerk/nextjs/server'
 import { sendEmail } from './user'
 // import { createprisma, OAuthStrategy } from '@wix/sdk'
 import { items } from '@wix/data'
 import axios from 'axios'
 
+// Utility function to dynamically import Prisma
+const getPrisma = async () => {
+  const { default: prisma } = await import('@/lib/prisma')
+  return prisma
+}
+
 export const verifyAccessToWorkspace = async (workspaceId: string) => {
   try {
     const user = await currentUser()
     if (!user) return { status: 403 }
 
+    const prisma = await getPrisma()
     const isUserInWorkspace = await prisma.workSpace.findUnique({
       where: {
         id: workspaceId,
@@ -47,6 +53,7 @@ export const verifyAccessToWorkspace = async (workspaceId: string) => {
 
 export const getWorkspaceFolders = async (workSpaceId: string) => {
   try {
+    const prisma = await getPrisma()
     const isFolders = await prisma.folder.findMany({
       where: {
         workSpaceId,
@@ -73,6 +80,7 @@ export const getAllUserVideos = async (workSpaceId: string) => {
     const user = await currentUser()
     if (!user) return { status: 404 }
     
+    const prisma = await getPrisma()
     const videos = await prisma.video.findMany({
       where: {
         OR: [{ workSpaceId }, { folderId: workSpaceId }],
@@ -118,6 +126,7 @@ export const getWorkSpaces = async () => {
 
     if (!user) return { status: 404 }
 
+    const prisma = await getPrisma()
     const workspaces = await prisma.user.findUnique({
       where: {
         clerkid: user.id,
@@ -161,6 +170,7 @@ export const createWorkspace = async (name: string) => {
   try {
     const user = await currentUser()
     if (!user) return { status: 404 }
+    const prisma = await getPrisma()
     const authorized = await prisma.user.findUnique({
       where: {
         clerkid: user.id,
@@ -203,6 +213,7 @@ export const createWorkspace = async (name: string) => {
 
 export const renameFolders = async (folderId: string, name: string) => {
   try {
+    const prisma = await getPrisma()
     const folder = await prisma.folder.update({
       where: {
         id: folderId,
@@ -222,6 +233,7 @@ export const renameFolders = async (folderId: string, name: string) => {
 
 export const createFolder = async (workspaceId: string) => {
   try {
+    const prisma = await getPrisma()
     const isNewFolder = await prisma.workSpace.update({
       where: {
         id: workspaceId,
@@ -242,6 +254,7 @@ export const createFolder = async (workspaceId: string) => {
 
 export const getFolderInfo = async (folderId: string) => {
   try {
+    const prisma = await getPrisma()
     const folder = await prisma.folder.findUnique({
       where: {
         id: folderId,
@@ -278,6 +291,7 @@ export const moveVideoLocation = async (
   folderId: string
 ) => {
   try {
+    const prisma = await getPrisma()
     const location = await prisma.video.update({
       where: {
         id: videoId,
@@ -298,6 +312,7 @@ export const getPreviewVideo = async (videoId: string) => {
   try {
     const user = await currentUser()
     if (!user) return { status: 404 }
+    const prisma = await getPrisma()
     const video = await prisma.video.findUnique({
       where: {
         id: videoId,
@@ -344,6 +359,7 @@ export const sendEmailForFirstView = async (videoId: string) => {
   try {
     const user = await currentUser()
     if (!user) return { status: 404 }
+    const prisma = await getPrisma()
     const firstViewSettings = await prisma.user.findUnique({
       where: { clerkid: user.id },
       select: {
@@ -413,6 +429,7 @@ export const editVideoInfo = async (
   description: string
 ) => {
   try {
+    const prisma = await getPrisma()
     const video = await prisma.video.update({
       where: { id: videoId },
       data: {
@@ -502,6 +519,7 @@ export const howToPost = async () => {
 
 export const getWorkspaceMembers = async (workspaceId: string) => {
   try {
+    const prisma = await getPrisma()
     const members = await prisma.member.findMany({
       where: {
         workSpaceId: workspaceId,
