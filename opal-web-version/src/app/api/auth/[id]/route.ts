@@ -13,15 +13,6 @@ export async function GET(
   console.log('Endpoint hit ✅')
 
   try {
-    // Add database connection check
-    if (!process.env.DATABASE_URL) {
-      console.error('DATABASE_URL not configured')
-      return NextResponse.json({ 
-        status: 500, 
-        error: 'Database not configured' 
-      })
-    }
-
     const userProfile = await client.user.findUnique({
       where: {
         clerkid: id,
@@ -35,8 +26,12 @@ export async function GET(
         },
       },
     })
-    if (userProfile)
+
+    if (userProfile) {
       return NextResponse.json({ status: 200, user: userProfile })
+    }
+
+    // User doesn't exist, create new user
     const clerkUserInstance = await clerkClient.users.getUser(id)
     const createUser = await client.user.create({
       data: {
@@ -66,16 +61,16 @@ export async function GET(
       },
     })
 
-    if (createUser) return NextResponse.json({ status: 201, user: createUser })
+    if (createUser) {
+      return NextResponse.json({ status: 201, user: createUser })
+    }
 
     return NextResponse.json({ status: 400 })
   } catch (error) {
-    console.error('Auth API Error:', error)
-    // Return more detailed error information for debugging
+    console.log('ERROR', error)
     return NextResponse.json({ 
       status: 500, 
-      error: 'Internal server error',
-      details: process.env.NODE_ENV === 'development' ? String(error) : 'Authentication failed'
+      error: 'Internal server error'
     })
   }
 }
