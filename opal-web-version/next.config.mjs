@@ -1,17 +1,20 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
     experimental: {
-        // Skip build-time data collection for API routes
-        skipTrailingSlashRedirect: true,
+        // Allow Prisma to be used in server components
+        serverComponentsExternalPackages: ['@prisma/client'],
     },
-    // Skip static generation for API routes during build
+    // Optional custom build ID
     generateBuildId: async () => {
         return 'build-' + Date.now()
     },
-    // Ensure all API routes are dynamic
+    // No redirects for now
     async redirects() {
         return []
     },
 }
 
-export default nextConfig;
+export default nextConfig
+
+
+//! CHANGED FOR DEPLOYMENT
