@@ -56,7 +56,11 @@ const AuthCallbackPage = async () => {
     // Fallback redirect
     return redirect('/auth/sign-in')
     
-  } catch (error) {
+  } catch (error: any) {
+    // Allow Next.js redirects to propagate
+    if (typeof error?.digest === 'string' && error.digest.startsWith('NEXT_REDIRECT')) {
+      throw error
+    }
     console.error('Auth callback error:', error)
     return redirect('/auth/sign-in')
   }
