@@ -14,7 +14,7 @@ const SignInPage = async (props: Props) => {
     redirect('/auth/callback')
   }
 
-  return <SignIn afterSignInUrl="/auth/callback" />
+  return <SignIn redirectUrl="/auth/callback" fallbackRedirectUrl="/auth/callback" />
 }
 
 export default SignInPage

@@ -24,12 +24,8 @@ export default function RootLayout({
   return (
     <ClerkProvider
       publishableKey={process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY}
-      afterSignInUrl="/auth/callback"
-      afterSignUpUrl="/auth/callback"
       signInUrl="/auth/sign-in"
       signUpUrl="/auth/sign-up"
-      signInFallbackRedirectUrl="/auth/callback"
-      signUpFallbackRedirectUrl="/auth/callback"
     >
       <html lang="en">
         <body className={`${manrope.className} bg-[#171717]`}>
