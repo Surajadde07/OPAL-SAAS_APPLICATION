@@ -78,7 +78,7 @@ const Sidebar = ({ activeWorkspaceId }: Props) => {
         defaultValue={activeWorkspaceId}
         onValueChange={onChangeActiveWorkspace}
       >
-        <SelectTrigger className="mt-16 text-neutral-400 bg-transparent">
+        <SelectTrigger className="mt-16 bg-transparent text-neutral-400">
           <SelectValue placeholder="Select a workspace"></SelectValue>
         </SelectTrigger>
         <SelectContent className="bg-[#111111] backdrop-blur-xl">
@@ -117,7 +117,7 @@ const Sidebar = ({ activeWorkspaceId }: Props) => {
                   size={15}
                   className="text-neutral-800/90 fill-neutral-500"
                 />
-                <span className="text-neutral-400 font-semibold text-xs">
+                <span className="text-xs font-semibold text-neutral-400">
                   Invite To Workspace
                 </span>
               </span>
@@ -211,7 +211,7 @@ const Sidebar = ({ activeWorkspaceId }: Props) => {
   return (
     <div className="full">
       <InfoBar />
-      <div className="md:hidden fixed my-4">
+      <div className="fixed my-4 md:hidden">
         <Sheet>
           <SheetTrigger
             asChild
@@ -226,13 +226,13 @@ const Sidebar = ({ activeWorkspaceId }: Props) => {
           </SheetTrigger>
           <SheetContent
             side={'left'}
-            className="p-0 w-fit h-full"
+            className="h-full p-0 w-fit"
           >
             {SidebarSection}
           </SheetContent>
         </Sheet>
       </div>
-      <div className="md:block hidden h-full">{SidebarSection}</div>
+      <div className="hidden h-full md:block">{SidebarSection}</div>
     </div>
   )
 }
