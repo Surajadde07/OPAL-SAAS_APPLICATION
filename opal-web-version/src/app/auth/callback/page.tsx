@@ -32,7 +32,23 @@ const AuthCallbackPage = async () => {
       }
     }
 
-    if (auth.status === 403 || auth.status === 400 || auth.status === 500) {
+    if (auth.status === 500) {
+      console.error('Authentication failed:', auth)
+      return (
+        <main className="flex items-center justify-center px-6 text-center text-white min-h-dvh">
+          <div>
+            <h1 className="text-xl font-semibold">Server configuration required</h1>
+            <p className="mt-3 text-sm opacity-80">
+              The server could not authenticate you. Ensure environment variables like
+              <code className="mx-1">DATABASE_URL</code> are configured and migrations are applied.
+            </p>
+            <p className="mt-4 text-sm opacity-80">After fixing, refresh this page.</p>
+          </div>
+        </main>
+      )
+    }
+
+    if (auth.status === 403 || auth.status === 400) {
       console.error('Authentication failed:', auth)
       return redirect('/auth/sign-in')
     }

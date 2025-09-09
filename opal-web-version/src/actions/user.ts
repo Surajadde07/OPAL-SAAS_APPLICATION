@@ -4,7 +4,16 @@ import { currentUser } from '@clerk/nextjs/server'
 import nodemailer from 'nodemailer'
 import Stripe from 'stripe'
 
-const stripe = new Stripe(process.env.STRIPE_CLIENT_SECRET as string)
+// Initialize Stripe only when needed (avoids crashing routes that don't use Stripe)
+const getStripe = () => {
+  const apiKey = process.env.STRIPE_CLIENT_SECRET
+  if (!apiKey) {
+    // Do not throw here for non-payment routes; the payment-specific code should handle absence
+    // by returning a clear error when it actually needs Stripe.
+    return null as unknown as Stripe
+  }
+  return new Stripe(apiKey)
+}
 
 // Utility function to dynamically import Prisma
 const getPrisma = async () => {
@@ -499,6 +508,11 @@ export const completeSubscription = async (session_id: string) => {
   try {
     const user = await currentUser()
     if (!user) return { status: 404 }
+
+    const stripe = getStripe()
+    if (!stripe) {
+      return { status: 500, error: 'Stripe not configured' }
+    }
 
     const session = await stripe.checkout.sessions.retrieve(session_id)
     if (session) {
